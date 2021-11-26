@@ -1,0 +1,16 @@
+{
+  "parserOptions": {
+    "ecmaVersion": 2019,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "rules": {
+    "semi": ["error", "never"],
+    "endOfLine": "auto"
+  },
+  "env": {
+    "browser": true
+  }
+}

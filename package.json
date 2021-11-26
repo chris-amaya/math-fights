@@ -1,0 +1,39 @@
+{
+  "name": "ts-monorepo",
+  "description": "Template for setting up a TypeScript monorepo",
+  "private": true,
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ],
+    "nohoist": [
+      "**/@react-native-async-storage/async-storage",
+      "**/react*",
+      "**/eslint*",
+      "**/react-dom",
+      "**/react-native",
+      "**/react-native/**",
+      "**/react-native-codegen",
+      "**/react-native-dev-menu",
+      "**/react-native-macos",
+      "**/react-native-windows",
+      "**/react-native-gesture-handler",
+      "**/@react-native-community",
+      "**/@react-native-community/**"
+    ]
+  },
+  "scripts": {
+    "docs": "doctoc --title '**Table of content**' README.md",
+    "clean": "lerna run clean",
+    "build": "lerna run build",
+    "pub": "lerna publish",
+    "test": "lerna run test",
+    "reset": "npx rimraf ./**/node_modules yarn.lock"
+  },
+  "devDependencies": {
+    "doctoc": "~2.1.0",
+    "lerna": "~4.0.0",
+    "react": "~17.0.0",
+    "typescript": "~4.5.0"
+  }
+}
