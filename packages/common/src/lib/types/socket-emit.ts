@@ -1,11 +1,15 @@
 import {GameQuestions} from './game'
 import {IUser} from './index'
 
+interface socketEmit<T> {
+  (data: T): void
+}
+
 export type IScocketEmitEvents = {
-  start: IStart
-  rematch: IRematch
-  winner: IWinner
-  'end-game': any
+  start: IStart | socketEmit<IStart>
+  rematch: IRematch | socketEmit<IRematch>
+  winner: IWinner | socketEmit<IWinner>
+  'end-game': any | socketEmit<any>
 }
 
 export interface IStart {
@@ -28,7 +32,3 @@ interface IWinner {
   loser: IUser
   tie: boolean
 }
-
-// interface IFinish {
-
-// }

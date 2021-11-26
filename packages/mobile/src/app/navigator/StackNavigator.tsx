@@ -10,7 +10,7 @@ import {DrawerScreenProps} from '@react-navigation/drawer'
 import BarIcon from './BarIcon'
 import WaitingRoom from '../screens/WaitingRoom'
 import MultiplayerGame from '../screens/MultiPlayer/Game'
-import ResultsMultiplayer from '../screens/MultiPlayer/Results/Results'
+// import ResultsMultiplayer from '../screens/MultiPlayer/'
 
 const Stack = createStackNavigator<RootStackParams>()
 interface Props extends DrawerScreenProps<any, any> {}
@@ -29,10 +29,10 @@ export default function StackNavigator({navigation, route}: Props) {
       <Stack.Screen name="WaitingRoom" component={WaitingRoom} />
 
       <Stack.Screen name="[MULTIPLAYER]: Game" component={MultiplayerGame} />
-      <Stack.Screen
+      {/* <Stack.Screen
         name="[MULTIPLAYER]: Results"
         component={ResultsMultiplayer}
-      />
+      /> */}
     </Stack.Navigator>
   )
 }

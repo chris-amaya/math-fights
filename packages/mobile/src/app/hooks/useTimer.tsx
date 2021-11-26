@@ -11,6 +11,7 @@ export default function useTimer() {
       return () => {
         timer.stop()
         setTiming(timer.getTime())
+        timer.reset()
       }
     }, []),
   )

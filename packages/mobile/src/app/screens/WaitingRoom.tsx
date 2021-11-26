@@ -44,88 +44,14 @@ export default function WaitingRoom({navigation}: IProps) {
   }, [time])
 
   useEffect(() => {
-    interface customEvent {
-      event: {
-        roomId: string
-        asldkfasldfk: 'hola' | 'error'
-      }
-      event2: {
-        roomId: string
-        saludo: 'hola' | 'error'
-      }
-    }
+    socket.on('start', ({opponent, questions, room}) => {
+      setQuestions(questions)
+      setOpponent(opponent)
+      setRoomId(room.id)
+      navigation.navigate('[MULTIPLAYER]: Game')
+    })
 
-    // socket.emit('event', {
-    //   roomId: '',
-    //   asldkfasldfk: 'error',
-    // } as customEvent['event'])
-
-    // socket.emit('event', {
-    //   name: 'que tal',
-    // }, ({}) => {
-
-    // })
-
-    // const d = socket.emit('event', {
-    //   name: 'hola',
-    // })
-
-    // socket.emit('event', {
-    //   name: 'hola',
-    // }, (({id})) => {
-
-    // })
-    // socket.emit(
-    //   'event',
-    //   {
-    //     name: 'hola',
-    //   },
-    //   ({id}) => {},
-    // )
-
-    // socket.emit('init')
-
-    // socket.on('init')
-    // socket.emit('queue')
-
-    // socket.on('bla', ({id}) => {
-    //   console.log(id)
-    // }|1)
-
-    // d.
-
-    // socket.emit('asdf', {
-
-    // }, () => {
-
-    // })
-
-    // socket.on('asdf', ({asdf: string}) => {
-
-    // })
-
-    // const d = socket.emit(
-    //   'event2',
-    //   {
-    //     name: 'event2',
-    //   },
-    //   (data: object) => {},
-    // )
-
-    // socket.emit<TSocketEmitEvents>('queue', {
-    //   id: socket.id,
-    //   difficult,
-    // } as ISocketEmit['queue'])
-
-    // socket.on<TSocketOnEvents>(
-    //   'init-game',
-    //   ({opponent, questions, roomId}: ISocketOn['init-game']) => {
-    //     setOpponent(opponent)
-    //     setQuestions(questions)
-    //     setRoomId(roomId)
-    //     navigation.navigate('[MULTIPLAYER]: Game')
-    //   },
-    // )
+    socket.emit('queue', difficult)
   }, [])
 
   return (

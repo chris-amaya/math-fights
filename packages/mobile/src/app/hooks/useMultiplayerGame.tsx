@@ -18,7 +18,10 @@ import {GameQuestions, shuffle} from '@math-fights/common'
 
 interface IMultiplayerGame {
   question: GameQuestions
-  getOptions: (options: number[], handleAnswer: () => void) => JSX.Element[]
+  getOptions: (
+    options: number[],
+    handleAnswer: (value: number) => void,
+  ) => JSX.Element[]
   handleAnswer: (answer: number) => void
   index: number
 }
@@ -33,7 +36,7 @@ export default function useMultiplayerGame(): IMultiplayerGame {
 
   const question = questions[index]
 
-  function handleAnswer(answer: number) {
+  function handleAnswer(answer: any) {
     const {result} = question
 
     if (answer === result) {
@@ -65,7 +68,7 @@ export default function useMultiplayerGame(): IMultiplayerGame {
 
   function getOptions(
     options: number[],
-    handlerAnswer: (...args) => void,
+    callback: (value: number) => void,
   ): JSX.Element[] {
     options = shuffle(options)
     return options.map((option, index) => {
@@ -73,7 +76,7 @@ export default function useMultiplayerGame(): IMultiplayerGame {
         <TouchableOpacity
           key={index}
           style={styles.cardButton}
-          onPress={() => handlerAnswer(option)}>
+          onPress={() => callback(option)}>
           <Text style={styles.cardButtonText}>{option}</Text>
         </TouchableOpacity>
       )

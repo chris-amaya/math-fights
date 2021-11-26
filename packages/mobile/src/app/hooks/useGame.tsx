@@ -19,7 +19,10 @@ interface Game {
   question: GameQuestions
   index: number
   handleAnswer: (answer: number) => void
-  getOptions: (options: number[], handleAnswer: () => void) => JSX.Element[]
+  getOptions: (
+    options: number[],
+    handleAnswer: (value: number) => void,
+  ) => JSX.Element[]
 }
 
 interface Props {
@@ -55,7 +58,7 @@ export default function useGame({limitQuestions}: Props): Game {
 
   function getOptions(
     options: number[],
-    handlerAnswer: (...args) => void,
+    handlerAnswer: (value: number) => void,
   ): JSX.Element[] {
     options = shuffle(options)
     return options.map((option, index) => {

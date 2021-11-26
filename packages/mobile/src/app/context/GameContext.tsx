@@ -3,7 +3,7 @@ import React, {createContext} from 'react'
 import {Timer} from '../classes/Timer'
 import {io, Socket} from 'socket.io-client'
 
-import {ISocketOnEvents, IScocketEmitEvents} from '@math-fights/shared'
+import {ISocketOnEvents, IScocketEmitEvents} from '@math-fights/common'
 
 export interface gameTypeContext {
   difficult: 'EASY' | 'MEDIUM' | 'HARD' | undefined
@@ -17,7 +17,7 @@ export interface gameTypeContext {
   timing: number
   setTiming: React.Dispatch<React.SetStateAction<number>>
   timer: Timer
-  socket: Socket<ISocketOnEvents, IScocketEmitEvents>
+  socket: Socket<IScocketEmitEvents, ISocketOnEvents>
   roomId: string
   setRoomId: React.Dispatch<React.SetStateAction<this['roomId']>>
   gameIndex: number

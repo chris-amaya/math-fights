@@ -42,7 +42,7 @@ export default function MultiplayerGame({
           </Text>
         </View>
         <View style={styles.cardBodyContainer}>
-          {getOptions([...question.fakeResults, result], () => {})}
+          {getOptions([...question.fakeResults, result], handleAnswer)}
         </View>
       </View>
     </View>

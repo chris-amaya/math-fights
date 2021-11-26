@@ -38,7 +38,7 @@ export default function Game({navigation}: Props) {
           </Text>
         </View>
         <View style={styles.cardBodyContainer}>
-          {getOptions([...question.fakeResults, question.result], () => {})}
+          {getOptions([...question.fakeResults, question.result], handleAnswer)}
         </View>
       </View>
     </View>
