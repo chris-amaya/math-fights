@@ -4,6 +4,6 @@
   "compilerOptions": {
     "outDir": "./dist"
   },
-
+  "exclude": ["./src/app/__tests__"],
   "include": ["src/**/*"]
 }

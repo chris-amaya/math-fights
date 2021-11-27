@@ -18,12 +18,13 @@ describe('tests on SocketApp', () => {
   }
 
   beforeEach(() => {
-    socketApp = new SocketApp(mockClient as any, mockServer as any)
+    socketApp = new SocketApp(mockServer as any)
     rooms = [
       {id: '1', difficult: 'HARD', users: [user1, user2]},
       {id: '2', difficult: 'HARD', users: [user3]},
     ]
     ;(socketApp['room'].rooms as any) = rooms
+    ;(socketApp['client'] as any) = mockClient
   })
 
   test('should queue and notify to all users in the room', () => {
@@ -31,7 +32,6 @@ describe('tests on SocketApp', () => {
     socketApp['users'].user = [user1, user2, user3]
     ;(socketApp['room'].rooms as any) = rooms
     socketApp['queue']('HARD')
-
     expect(mockNotify).toHaveBeenCalled()
   })
 
@@ -109,6 +109,7 @@ describe('tests on SocketApp', () => {
   })
 
   test('should be the status game as draw', () => {
+    // TODO: add expect
     const user1 = {id: '50000', rematch: false}
     const user2 = {id: '60000', rematch: true, correctAnswers: 5}
     mockClient.id = user1.id

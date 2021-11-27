@@ -4,13 +4,13 @@ import {Server} from 'socket.io'
 import http from 'http'
 
 import {ISocketOnEvents, IScocketEmitEvents} from '@math-fights/common'
-import SocketApp from './classes/SocketApp'
+import socketController from './sockets/socket'
 
 export default class AppServer {
   public app: express.Application
   public port: number
   public httpServer
-  public io
+  public io: Server<ISocketOnEvents, IScocketEmitEvents>
 
   constructor(port: number) {
     this.port = port
@@ -22,6 +22,7 @@ export default class AppServer {
       },
     })
     this.middlewares()
+
     this.sockets()
   }
 
@@ -31,7 +32,7 @@ export default class AppServer {
   }
 
   sockets() {
-    this.io.on('connection', (client) => new SocketApp(client, this.io))
+    this.io.on('connection', (client) => socketController(client, this.io))
   }
 
   start(callback: () => void) {

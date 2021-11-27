@@ -59,11 +59,7 @@ export default class Room {
 
   addUserToRoomById(roomId: string, user: IUser) {
     const roomIndex = this.rooms.findIndex((room) => room.id === roomId)
-
     const {users} = this.rooms[roomIndex]
-
-    // if (users.length > 2) throw new Error('no space in this room')
-    // users.push(user)
     users.push(user)
     return users
   }
@@ -102,7 +98,7 @@ export default class Room {
   /**
    * this method should return a room that has just 1 user in it and its available
    */
-  findRoomAvailable(difficult: IRoom['difficult']) {
+  findRoomAvailable(difficult: GameDifficulty) {
     const roomIndex = this.rooms.findIndex(
       (room) => room.difficult === difficult && room.users.length < 2,
     )
@@ -110,17 +106,16 @@ export default class Room {
     if (roomIndex === -1) return false
 
     const {users} = this.rooms[roomIndex]
-
-    if (users) {
-      if (users.length <= 1) {
-        return {
-          index: roomIndex,
-          room: this.rooms[roomIndex],
-        }
-      } else {
-        return false
+    if (users.length <= 1) {
+      return {
+        index: roomIndex,
+        room: this.rooms[roomIndex],
       }
-    } else return false
+    } else {
+      console.log('room: no space', users)
+
+      return false
+    }
   }
 
   updateUser(user: IUser, roomId: string) {
