@@ -1,20 +1,28 @@
 import React, {useContext, useEffect, useRef, useState} from 'react'
 import {View, Text, StyleSheet} from 'react-native'
-import {NavigationProp} from '@react-navigation/native'
+import {NavigationProp, RouteProp} from '@react-navigation/native'
 
 import {styles} from '../styles'
-import {GameContext} from '../context/GameContext'
 import {RootStackParams} from '../types/RootStackParams'
 import {Timer} from '../classes/Timer'
+import {AppContext} from '../context/AppContext'
 import {GameMultiplayerContext} from '../context/GameMultiplayerContext'
+import useNavigateWithState from '../hooks/useNavigateWithState'
 
 interface IProps {
-  navigation: NavigationProp<RootStackParams, 'Game'>
+  navigation: NavigationProp<RootStackParams, 'WaitingRoom'>
+  route: RouteProp<RootStackParams, 'WaitingRoom'>
 }
 
-export default function WaitingRoom({navigation}: IProps) {
-  const {socket, difficult, setRoomId} = useContext(GameContext)
-  const {setOpponent, setQuestions} = useContext(GameMultiplayerContext)
+export default function WaitingRoom({navigation, route}: IProps) {
+  useNavigateWithState()
+  const {text, displayTimer: _displayTimer} = route.params
+  const displayTimer = _displayTimer ?? true
+
+  const {socket, setRoomId, setURL} = useContext(AppContext)
+  const {opponentRef, setOpponent, setQuestions, setWinner, setTie} =
+    useContext(GameMultiplayerContext)
+
   const [time, setTime] = useState('00:00')
   const timer = useRef(new Timer())
   const isTimerActive = useRef(false)
@@ -30,6 +38,7 @@ export default function WaitingRoom({navigation}: IProps) {
     }
   }, [])
 
+  // TODO: remove this timer and replace for useTimer hook
   useEffect(() => {
     const timeout = setTimeout(() => {
       const {minutes, seconds} = timer.current.getTimeInParts(
@@ -44,24 +53,38 @@ export default function WaitingRoom({navigation}: IProps) {
   }, [time])
 
   useEffect(() => {
-    socket.on('start', ({opponent, questions, room}) => {
+    socket.on('start', ({questions, room}) => {
       setQuestions(questions)
-      setOpponent(opponent)
+
+      if (room.users[0].id === socket.id) {
+        setOpponent(room.users[1])
+      } else {
+        setOpponent(room.users[0])
+      }
+
       setRoomId(room.id)
-      navigation.navigate('[MULTIPLAYER]: Game')
+      setURL('[MULTIPLAYER]: Game')
     })
 
-    socket.emit('queue', difficult)
-  }, [])
+    socket.on('winner', ({winner, loser, tie}) => {
+      setWinner(winner)
+      setOpponent(winner.id === opponentRef.current!.id ? winner : loser)
+      setTie(tie)
+      setURL('[MULTIPLAYER]: Results')
+    })
+  }, [socket])
 
   return (
     <View style={styles.container}>
       <View>
-        <Text style={localStyles.title}>Looking for an opponent</Text>
-        <View>
-          <Text style={localStyles.timeTitle}>Time</Text>
-          <Text style={localStyles.time}>{time}</Text>
-        </View>
+        <Text style={localStyles.title}>{text}</Text>
+
+        {displayTimer && (
+          <View>
+            <Text style={localStyles.timeTitle}>Time</Text>
+            <Text style={localStyles.time}>{time}</Text>
+          </View>
+        )}
       </View>
     </View>
   )

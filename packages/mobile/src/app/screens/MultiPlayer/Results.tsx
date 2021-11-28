@@ -1,13 +1,15 @@
 import React from 'react'
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native'
-import {styles} from '../styles'
-import {colors} from '../common/colors'
+import {styles} from '../../styles'
+import {colors} from '../../common/colors'
 import {useContext} from 'react'
-import {GameContext} from '../context/GameContext'
+import {GameContext} from '../../context/GameContext'
 import {NavigationProp} from '@react-navigation/core'
-import {RootStackParams} from '../types/RootStackParams'
-import useBackPress from '../hooks/useBackPress'
-import {AppContext} from '../context/AppContext'
+import {RootStackParams} from '../../types/RootStackParams'
+import useBackPress from '../../hooks/useBackPress'
+import PlayerCard from './PlayerCard'
+import {GameMultiplayerContext} from '../../context/GameMultiplayerContext'
+import {AppContext} from '../../context/AppContext'
 
 interface Props {
   navigation: NavigationProp<RootStackParams, 'Results'>
@@ -17,32 +19,40 @@ export default function Results({navigation}: Props) {
     navigation.navigate('Home')
   })
 
-  const {answers, timing, setAnswers} = useContext(GameContext)
+  const {timer} = useContext(AppContext)
+  const {answers, timing} = useContext(GameContext)
+  const {opponent, winner, tie} = useContext(GameMultiplayerContext)
+
+  if (!opponent) throw new Error('Opponent is not defined')
 
   function handleReset() {
-    setAnswers({correct: 0, wrong: 0})
     navigation.navigate('Game')
+  }
+
+  let winnerText = ''
+  if (tie) {
+    winnerText = 'Tie'
+  } else if (winner) {
+    if (winner.id === opponent.id) {
+      winnerText = 'You Lose'
+    } else {
+      winnerText = 'You Win'
+    }
   }
 
   return (
     <View style={styles.container}>
       <View style={styles.card}>
-        <View>
-          <Text style={{...styles.title, textAlign: 'center'}}>Results</Text>
+        <View style={styles.titleContainer}>
+          <Text style={{...styles.title, color: '#000'}}>{winnerText}</Text>
         </View>
-        <View style={styles.cardBodyContainer}>
-          <View style={localStyles.resultContainer}>
-            <Text style={localStyles.resultTitle}>Correct</Text>
-            <Text style={localStyles.resultText}>{answers.correct}</Text>
-          </View>
-          <View style={localStyles.resultContainer}>
-            <Text style={localStyles.resultTitle}>Wrong</Text>
-            <Text style={localStyles.resultText}>{answers.wrong}</Text>
-          </View>
-          <View style={localStyles.resultContainer}>
-            <Text style={localStyles.resultTitle}>Timing</Text>
-            <Text style={localStyles.resultText}>{timing}</Text>
-          </View>
+        <View style={localStyles.resultContainer}>
+          <PlayerCard isOpponent={false} answers={answers} timing={timing} />
+          <PlayerCard
+            isOpponent={true}
+            answers={opponent.answers!}
+            timing={timer.getTimeInString(opponent.timing!)}
+          />
         </View>
         <View>
           <TouchableOpacity style={localStyles.button} onPress={handleReset}>

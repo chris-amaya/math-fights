@@ -14,19 +14,24 @@ export default function MultiplayerGame({
 }) {
   useBackPress(false)
   useTimer()
-  const {handleAnswer, getOptions, question, index} = useMultiplayerGame()
+  const {handleAnswer, getOptions, question, endGame} = useMultiplayerGame({
+    navigation,
+  })
 
   useEffect(() => {
     if (!question) {
-      navigation.navigate('[MULTIPLAYER]: Results')
+      endGame()
+      navigation.navigate('WaitingRoom', {
+        text: 'Waiting for opponent',
+        displayTimer: false,
+      })
     }
-  }, [index])
+  }, [question])
 
   if (!question) {
     return null
   }
 
-  // const {number1, number2, sign, result} = question
   const {
     numbersUsed: [number1, number2],
     sign,

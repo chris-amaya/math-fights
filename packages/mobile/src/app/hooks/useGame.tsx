@@ -6,7 +6,7 @@
  */
 
 import {useFocusEffect} from '@react-navigation/native'
-import React, {useCallback, useContext, useEffect, useState} from 'react'
+import React, {useCallback, useContext, useState} from 'react'
 import {TouchableOpacity, Text} from 'react-native'
 import {GameContext} from '../context/GameContext'
 import {styles} from '../styles'
@@ -30,8 +30,7 @@ interface Props {
 }
 export default function useGame({limitQuestions}: Props): Game {
   const [index, setIndex] = useState(0)
-  const {setCorrectAnswers, setWrongAnswers, setGameIndex} =
-    useContext(GameContext)
+  const {setAnswers, setGameIndex} = useContext(GameContext)
 
   const questions = useQuestions(limitQuestions)
   const question = questions[index]
@@ -41,8 +40,8 @@ export default function useGame({limitQuestions}: Props): Game {
     const isCorrect = answer === question.result
 
     isCorrect
-      ? setCorrectAnswers((correctAnswers) => correctAnswers + 1)
-      : setWrongAnswers((value) => value + 1)
+      ? setAnswers((answers) => ({...answers, correct: answers.correct + 1}))
+      : setAnswers((answers) => ({...answers, wrong: answers.wrong + 1}))
 
     setIndex(index + 1)
   }
@@ -51,6 +50,7 @@ export default function useGame({limitQuestions}: Props): Game {
     useCallback(() => {
       return () => {
         setIndex(0)
+        setAnswers({correct: 0, wrong: 0})
         setGameIndex((value) => value + 1)
       }
     }, []),

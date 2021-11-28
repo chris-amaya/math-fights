@@ -5,23 +5,25 @@ import {colors} from '../common/colors'
 import {NavigationProp} from '@react-navigation/native'
 import {RootStackParams} from '../types/RootStackParams'
 import {GameContext, gameTypeContext} from '../context/GameContext'
+import {AppContext} from '../context/AppContext'
+import {GameDifficulty} from '@math-fights/common'
 
 interface Props {
   navigation: NavigationProp<RootStackParams, 'Difficult'>
 }
 
 export default function Difficult({navigation}: Props) {
-  const {setDifficult, mode} = useContext<gameTypeContext>(GameContext)
+  const {setDifficult, mode, socket} = useContext(AppContext)
 
-  function handleDifficult(value: gameTypeContext['difficult']) {
+  function handleDifficult(value: GameDifficulty) {
     setDifficult(value)
-    navigation.navigate('Game')
     if (mode === 'SINGLE_PLAYER') {
       navigation.navigate('Game')
     }
 
     if (mode === 'MULTIPLAYER') {
-      navigation.navigate('WaitingRoom')
+      socket.emit('queue', value)
+      navigation.navigate('WaitingRoom', {text: 'Waiting for opponent'})
     }
   }
   return (

@@ -3,7 +3,10 @@ export type RootStackParams = {
   Difficult: undefined
   Game: undefined
   Results: undefined
-  WaitingRoom: undefined
+  WaitingRoom: {
+    text: string
+    displayTimer?: boolean
+  }
   '[MULTIPLAYER]: Game': undefined
   '[MULTIPLAYER]: Results': undefined
 }

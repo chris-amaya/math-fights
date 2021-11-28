@@ -3,6 +3,7 @@ import React, {useContext, useEffect} from 'react'
 import {View, Text, Image, TouchableOpacity} from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
 import {colors} from '../common/colors'
+import {AppContext, IAppContext} from '../context/AppContext'
 import {GameContext, gameTypeContext} from '../context/GameContext'
 import {styles} from '../styles'
 import {RootStackParams} from '../types/RootStackParams'
@@ -12,7 +13,7 @@ interface Props {
 }
 
 export default function Home({navigation}: Props) {
-  const {setMode} = useContext<gameTypeContext>(GameContext)
+  const {setMode} = useContext(AppContext)
 
   useEffect(() => {
     navigation.setOptions({
@@ -20,7 +21,7 @@ export default function Home({navigation}: Props) {
     })
   }, [])
 
-  function handleNavigation(value: gameTypeContext['mode']): void {
+  function handleNavigation(value: IAppContext['mode']): void {
     setMode(value)
     navigation.navigate('Difficult')
   }

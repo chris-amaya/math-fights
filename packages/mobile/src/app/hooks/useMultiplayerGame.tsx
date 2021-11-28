@@ -13,8 +13,12 @@ import {styles} from '../styles'
 import {GameMultiplayerContext} from '../context/GameMultiplayerContext'
 import {GameContext} from '../context/GameContext'
 import {TSocketEmitEvents, ISocketEmit} from '../types/socket-emit.types'
-import {useFocusEffect} from '@react-navigation/native'
+import {useFocusEffect, NavigationProp} from '@react-navigation/native'
 import {GameQuestions, shuffle} from '@math-fights/common'
+import {RootStackParams} from '../types/RootStackParams'
+import {AppContext} from '../context/AppContext'
+import useNavigateWithState from './useNavigateWithState'
+import {Timer} from '../classes/Timer'
 
 interface IMultiplayerGame {
   question: GameQuestions
@@ -24,15 +28,25 @@ interface IMultiplayerGame {
   ) => JSX.Element[]
   handleAnswer: (answer: number) => void
   index: number
+  endGame: () => void
 }
 
-export default function useMultiplayerGame(): IMultiplayerGame {
-  const {questions, opponent} = useContext(GameMultiplayerContext)
-  const {socket, timing, roomId} = useContext(GameContext)
-  const [index, setIndex] = useState(0)
+interface Props {
+  navigation: NavigationProp<RootStackParams, '[MULTIPLAYER]: Game'>
+}
 
-  const [correctAnswers, setCorrectAnswers] = useState(0)
-  const [wrongAnswers, setWrongAnswers] = useState(0)
+export default function useMultiplayerGame({
+  navigation,
+}: Props): IMultiplayerGame {
+  const [index, setIndex] = useState(0)
+  const {answers, setAnswers} = useContext(GameContext)
+  const {questions} = useContext(GameMultiplayerContext)
+  const {socket, roomId} = useContext(AppContext)
+
+  // const [timer, setTimer] = useState(new Timer())
+  const timer = useRef(new Timer())
+
+  if (!questions) throw new Error('questions is not defined')
 
   const question = questions[index]
 
@@ -40,9 +54,9 @@ export default function useMultiplayerGame(): IMultiplayerGame {
     const {result} = question
 
     if (answer === result) {
-      setCorrectAnswers((answer: number) => answer + 1)
+      setAnswers((answers) => ({...answers, correct: answers.correct + 1}))
     } else {
-      setWrongAnswers((answer: number) => answer + 1)
+      setAnswers((answers) => ({...answers, wrong: answers.wrong + 1}))
     }
 
     setIndex(index + 1)
@@ -50,20 +64,24 @@ export default function useMultiplayerGame(): IMultiplayerGame {
 
   useFocusEffect(
     useCallback(() => {
+      setAnswers({correct: 0, wrong: 0})
+      timer.current.start()
       return () => {
         setIndex(0)
-        endGame()
+        timer.current.reset()
       }
     }, []),
   )
 
   function endGame() {
-    // TODO: send data to the server
-    // socket.emit('player-finished', {
-    //   correctAnswers,
-    //   timing,
-    //   roomId,
-    // } as ISocketEmit['player-finished'])
+    timer.current.stop()
+    console.log('finish event', timer.current.getTime())
+
+    socket.emit('finish', {
+      roomId,
+      answers,
+      timer: timer.current.getTime(),
+    })
   }
 
   function getOptions(
@@ -88,5 +106,6 @@ export default function useMultiplayerGame(): IMultiplayerGame {
     handleAnswer,
     getOptions,
     index,
+    endGame,
   }
 }

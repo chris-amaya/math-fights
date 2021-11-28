@@ -1,20 +1,26 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
-import {createContext} from 'react'
-import React from 'react'
-import {IInitGame} from '../types/socket-on.types'
-import {IUser} from '../types/socket-emit.types'
-import {GameQuestions} from '@math-fights/shared'
+import React, {createContext} from 'react'
+import {GameQuestions, IUser} from '@math-fights/common'
 
 export interface IGameMultiplayerContext {
-  questions: GameQuestions[]
-  setQuestions: React.Dispatch<React.SetStateAction<GameQuestions[]>>
-  opponent: IUser
-  setOpponent: React.Dispatch<React.SetStateAction<IUser>>
+  questions: GameQuestions[] | null
+  setQuestions: React.Dispatch<React.SetStateAction<this['questions']>>
+  opponent: IUser | null
+  opponentRef: React.MutableRefObject<this['opponent']>
+  setOpponent: React.Dispatch<IUser | null>
+  winner: IUser | null
+  setWinner: React.Dispatch<React.SetStateAction<IUser | null>>
+  tie: boolean
+  setTie: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export const GameMultiplayerContext = createContext<IGameMultiplayerContext>({
   questions: [],
   setQuestions: () => {},
-  opponent: {id: ''},
+  opponentRef: {current: null},
+  opponent: null,
   setOpponent: () => {},
+  winner: null,
+  setWinner: () => {},
+  tie: false,
+  setTie: () => {},
 })
