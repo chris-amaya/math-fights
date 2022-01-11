@@ -10,6 +10,7 @@ export type IScocketEmitEvents = {
   rematch: IRematch | socketEmit<IRematch>
   winner: IWinner | socketEmit<IWinner>
   'end-game': any | socketEmit<any>
+  'want-rematch': any | socketEmit<any>
 }
 
 export interface IStart {

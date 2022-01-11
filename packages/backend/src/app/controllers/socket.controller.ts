@@ -21,7 +21,6 @@ function queue(this: ISocketContext, difficult: GameDifficulty) {
       const questions = getQuestions(10, difficult)
 
       notify.call(this, users, 'start', {
-        opponent: this.room.getOpponent(roomData.room.id, user.id),
         questions,
         room: {
           ...roomData.room,
@@ -41,7 +40,7 @@ function finish(this: ISocketContext, {answers, roomId, timer}: IFinishProps) {
     {
       id: this.client.id,
       finished: true,
-      correctAnswers: answers.correct,
+      answers,
       timing: timer,
       rematch: false,
     },
@@ -51,8 +50,6 @@ function finish(this: ISocketContext, {answers, roomId, timer}: IFinishProps) {
   if (this.room.bothPlayersHaveFinished(roomId)) {
     const players = this.room.getUsersInRoom(roomId)
     const {winner, loser, tie} = this.room.getWinner(players[0], players[1])
-
-    console.log('winner', this.client.id)
 
     notify.call(this, players, 'winner', {
       winner,
@@ -75,18 +72,24 @@ function rematch(this: ISocketContext, roomId: string) {
         {
           id: user.id,
           rematch: false,
-          correctAnswers: 0,
+          answers: {
+            correct: 0,
+            wrong: 0,
+          },
           timing: 0,
           finished: false,
-          totalAnswers: 0,
         },
         roomId,
       )
     })
+  } else {
+    notify.call(this, opponent, 'want-rematch')
   }
 }
 
 function disconnect(this: ISocketContext) {
+  console.log('disconnect', this.client.id)
+
   const roomData = this.room.findRoomByUser(this.client.id)
   if (roomData) {
     notify.call(this, roomData.users, 'end-game')

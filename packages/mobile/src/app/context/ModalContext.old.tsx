@@ -9,7 +9,7 @@ export interface modalTypeContext {
   setIsVisible: React.Dispatch<this['isVisible']>
 }
 
-export const ModalContext = createContext<modalTypeContext>({
+export const ModalContextOld = createContext<modalTypeContext>({
   title: '',
   setTitle: () => {},
   text: '',

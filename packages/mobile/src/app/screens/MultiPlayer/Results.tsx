@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {ReactElement, useEffect, useRef, useState} from 'react'
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native'
 import {styles} from '../../styles'
 import {colors} from '../../common/colors'
@@ -10,6 +10,8 @@ import useBackPress from '../../hooks/useBackPress'
 import PlayerCard from './PlayerCard'
 import {GameMultiplayerContext} from '../../context/GameMultiplayerContext'
 import {AppContext} from '../../context/AppContext'
+import {ModalContextOld} from '../../context/ModalContext.old'
+import Modal from '../../components/Modal.old'
 
 interface Props {
   navigation: NavigationProp<RootStackParams, 'Results'>
@@ -19,14 +21,50 @@ export default function Results({navigation}: Props) {
     navigation.navigate('Home')
   })
 
-  const {timer} = useContext(AppContext)
+  const {opponent, winner, tie, setQuestions} = useContext(
+    GameMultiplayerContext,
+  )
+  const {timer, socket, roomId} = useContext(AppContext)
   const {answers, timing} = useContext(GameContext)
-  const {opponent, winner, tie} = useContext(GameMultiplayerContext)
+  const {setIsVisible, setText, setTitle} = useContext(ModalContextOld)
+  const [wantRematch, setWantRematch] = useState(false)
 
   if (!opponent) throw new Error('Opponent is not defined')
 
+  useEffect(() => {
+    socket.on('rematch', (data) => {
+      setIsVisible(false)
+      setQuestions(data)
+      navigation.navigate('[MULTIPLAYER]: Game')
+    })
+
+    // TODO: add event to get noticed when opponent wants to rematch
+    socket.on('want-rematch', () => {
+      setWantRematch(true)
+      setIsVisible(true)
+      setTitle('Rematch?')
+      setText('Opponent wants to rematch')
+    })
+
+    socket.on('end-game', () => {
+      navigation.navigate('Home')
+    })
+  }, [socket])
+
   function handleReset() {
-    navigation.navigate('Game')
+    setTitle('Rematch')
+    setText('waiting for opponent to accept the rematch')
+    setIsVisible(true)
+    socket.emit('rematch', {roomId})
+    socket.off('want-rematch')
+  }
+
+  // if this method is called, it means the user doesnt want to rematch
+  function handleRematch() {
+    socket.off('want-rematch')
+    socket.off('rematch')
+    socket.emit('end-game')
+    navigation.navigate('Home')
   }
 
   let winnerText = ''
@@ -40,9 +78,25 @@ export default function Results({navigation}: Props) {
     }
   }
 
+  const ButtonReset = () => (
+    <TouchableOpacity
+      style={{
+        borderWidth: 2,
+        borderColor: colors.primary,
+        borderRadius: 15,
+        paddingVertical: 5,
+      }}
+      onPress={handleReset}>
+      <Text style={styles.cardButtonText}>Reset</Text>
+    </TouchableOpacity>
+  )
+
   return (
     <View style={styles.container}>
       <View style={styles.card}>
+        <Modal
+          callback={handleRematch}
+          confirm={wantRematch ? <ButtonReset /> : null}></Modal>
         <View style={styles.titleContainer}>
           <Text style={{...styles.title, color: '#000'}}>{winnerText}</Text>
         </View>

@@ -1,55 +1,113 @@
-import RNModal from 'react-native-modal'
-import React, {useContext, useEffect} from 'react'
-import {ModalContext} from '../context/ModalContext'
-import {Button, Text, View, StyleSheet, TouchableOpacity} from 'react-native'
-import {styles} from '../styles'
+import React from 'react'
+import {
+  Text,
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  ActivityIndicator,
+} from 'react-native'
 import {colors} from '../common/colors'
 import Spacer from './Spacer'
 
-export default function Modal() {
-  const {isVisible, text, setIsVisible, setText} = useContext(ModalContext)
+interface Props {
+  show: boolean
+  disabled: boolean
+  close: () => void
+  confirm: () => void
+  modalProps?: {
+    title?: string
+  }
+}
 
-  function handleCloseModal() {
-    setIsVisible(false)
+export default function Modal({show, close, confirm}: Props) {
+  if (!show) {
+    return null
   }
 
-  useEffect(() => {
-    if (!isVisible) {
-      setText('')
-    }
-  }, [isVisible])
-
   return (
-    <RNModal isVisible={isVisible}>
-      <Spacer spacing={3} />
-      <View style={{flex: 1}}>
-        <View style={{flex: 1, ...styles.titleContainer}}>
-          <View style={styles.titleContainer}>
-            <Text style={localStyles.text}>{text}</Text>
-          </View>
+    <View style={style.container}>
+      <Spacer spacing={4} />
+      <View style={style.content}>
+        <View style={style.titleContainer}>
+          <Text style={{...style.text, ...style.titleText}}>Modal Text</Text>
+        </View>
+        <View style={style.textContainer}>
+          <Text style={{...style.text}}>
+            Waiting for opponent to accept rematch
+          </Text>
         </View>
         <View>
-          <TouchableOpacity
-            style={localStyles.button}
-            onPress={handleCloseModal}>
-            <Text style={styles.cardButtonText}>Cancel</Text>
-          </TouchableOpacity>
+          <ActivityIndicator size="large" color={colors.primary} />
         </View>
       </View>
-      <Spacer spacing={3} />
-    </RNModal>
+      <View style={style.buttonsContainer}>
+        <TouchableOpacity
+          style={{...style.button, ...style.buttonCancel}}
+          onPress={close}>
+          <Text style={style.buttonCancelText}>Close</Text>
+        </TouchableOpacity>
+        <Spacer spacing={0.2} />
+        <TouchableOpacity
+          style={{...style.button, ...style.buttonConfirm}}
+          onPress={confirm}>
+          <Text style={style.buttonConfirmText}>Confirm</Text>
+        </TouchableOpacity>
+      </View>
+      <Spacer spacing={4} />
+    </View>
   )
 }
 
-const localStyles = StyleSheet.create({
+const style = StyleSheet.create({
+  container: {
+    backgroundColor: 'rgba(0, 0, 0, .8)',
+    flex: 1,
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+    alignContent: 'center',
+    alignItems: 'center',
+  },
+  titleContainer: {
+    justifyContent: 'flex-end',
+    textAlign: 'right',
+    marginBottom: 5,
+  },
+  titleText: {
+    fontSize: 18,
+  },
   text: {
     color: '#fff',
-    fontWeight: 'bold',
+  },
+  content: {
+    flex: 1,
+    marginBottom: 30,
+  },
+
+  textContainer: {},
+
+  buttonsContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
   },
   button: {
-    borderWidth: 2,
-    borderColor: colors.primary,
-    borderRadius: 15,
-    paddingVertical: 5,
+    backgroundColor: '#fff',
+    padding: 15,
+    borderRadius: 5,
+  },
+  buttonCancel: {
+    backgroundColor: colors.accent,
+  },
+  buttonCancelText: {
+    color: '#fff',
+  },
+  buttonConfirm: {
+    backgroundColor: colors.primary,
+  },
+  buttonConfirmText: {
+    color: '#fff',
   },
 })

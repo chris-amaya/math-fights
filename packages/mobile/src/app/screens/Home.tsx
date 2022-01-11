@@ -3,8 +3,10 @@ import React, {useContext, useEffect} from 'react'
 import {View, Text, Image, TouchableOpacity} from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
 import {colors} from '../common/colors'
+import Modal from '../components/Modal.old'
 import {AppContext, IAppContext} from '../context/AppContext'
 import {GameContext, gameTypeContext} from '../context/GameContext'
+import useModal from '../hooks/useModal'
 import {styles} from '../styles'
 import {RootStackParams} from '../types/RootStackParams'
 
@@ -14,6 +16,15 @@ interface Props {
 
 export default function Home({navigation}: Props) {
   const {setMode} = useContext(AppContext)
+  const {modal} = useModal()
+
+  function ModalContent({data, status}: any) {
+    return (
+      <View>
+        <Text>Custom modal content</Text>
+      </View>
+    )
+  }
 
   useEffect(() => {
     navigation.setOptions({
@@ -29,6 +40,7 @@ export default function Home({navigation}: Props) {
   return (
     <View style={styles.container}>
       <View>
+        <Modal></Modal>
         <View style={styles.titleContainer}>
           <Text>Welcome To</Text>
           <Text style={styles.title}>Math Fights</Text>
@@ -42,6 +54,24 @@ export default function Home({navigation}: Props) {
         <View style={styles.buttonsContainer}>
           <View style={styles.rootButtonContainer}>
             <TouchableOpacity onPress={() => handleNavigation('SINGLE_PLAYER')}>
+              {/* <TouchableOpacity
+              onPress={() => {
+                modal(
+                  ModalContent,
+                  {
+                    data: {name: 'test', color: 'red'},
+                  },
+                  {
+                    close: () => {
+                      console.log('called close')
+                    },
+                    confirm: () => {
+                      console.log('called confirm')
+                      return Promise.resolve(null)
+                    },
+                  },
+                )
+              }}> */}
               <View style={styles.buttonContainer}>
                 <View>
                   <Icon name="happy-outline" size={30} color={colors.primary} />

@@ -7,7 +7,9 @@ export interface IUser {
   id: string
   timing?: number
   finished?: boolean
-  correctAnswers?: number
-  totalAnswers?: number
+  answers?: {
+    correct: number
+    wrong: number
+  }
   rematch?: boolean
 }

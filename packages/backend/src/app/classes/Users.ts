@@ -1,5 +1,4 @@
-import {IScocketEmitEvents, ISocketOnEvents, IUser} from '@math-fights/common'
-import {Server} from 'socket.io'
+import {IUser} from '@math-fights/common'
 
 export default class Users {
   public user: IUser[] = []
@@ -12,7 +11,7 @@ export default class Users {
     this.user.push(user)
   }
 
-  remove(userId) {
+  remove(userId: IUser['id']) {
     this.user = this.user.filter((u) => u.id !== userId)
   }
 }

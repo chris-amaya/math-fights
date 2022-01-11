@@ -1,9 +1,9 @@
 export interface IPlayer {
   id: string
-  timing: string
+  timing: number
   roomId: string
   answers: {
-    corret: number
+    correct: number
     wrong: number
   }
   score: number

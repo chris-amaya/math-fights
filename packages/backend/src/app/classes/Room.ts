@@ -143,11 +143,14 @@ export default class Room {
     let loser: IUser
     let tie = false
 
-    if (player1.correctAnswers === player2.correctAnswers) {
+    if (!player1.answers || !player2.answers)
+      throw new Error('player has answers')
+
+    if (player1.answers.correct === player2.answers.correct) {
       winner = player1
       loser = player2
       tie = true
-    } else if (player1.correctAnswers > player2.correctAnswers) {
+    } else if (player1.answers.correct > player2.answers.correct) {
       winner = player1
       loser = player2
     } else {

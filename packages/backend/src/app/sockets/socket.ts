@@ -37,8 +37,9 @@ export const socket: ISocket = (client, io) => {
 
   client.on('queue', (data) => queue.call(context, data))
   client.on('finish', (data) => finish.call(context, data))
-  client.on('rematch', (data) => rematch.call(context, data))
-  client.on('disconnect', disconnect.call(context))
+  client.on('rematch', ({roomId}) => rematch.call(context, roomId))
+  client.on('end-game', () => disconnect.call(context))
+  client.on('disconnect', () => disconnect.call(context))
 }
 
 export default socket

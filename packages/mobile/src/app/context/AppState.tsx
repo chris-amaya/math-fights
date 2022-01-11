@@ -8,9 +8,11 @@ import {
   GameMultiplayerContext,
   IGameMultiplayerContext,
 } from './GameMultiplayerContext'
-import {ModalContext} from './ModalContext'
 import {AppContext, IAppContext, socketURL} from './AppContext'
 import {useReferredState} from '../hooks/useReferredState'
+import ModalProvider from './modal/ModalProvider'
+import {ModalContext} from './modal/ModalContext'
+import {ModalContextOld} from './ModalContext.old'
 
 const socket = io(socketURL)
 
@@ -31,6 +33,7 @@ export default function AppState({children}: {children: ReactNode}) {
     wrong: 0,
   })
   const [timing, setTiming] = useState<string>('')
+  const [gameIndex, setGameIndex] = useState(0)
 
   const [questions, setQuestions] =
     useState<IGameMultiplayerContext['questions']>(null)
@@ -39,11 +42,9 @@ export default function AppState({children}: {children: ReactNode}) {
   const [opponent, opponentRef, setOpponent] =
     useReferredState<IGameMultiplayerContext['opponent']>(null)
 
-  // ModalContext
   const [title, setTitle] = useState('')
   const [text, setText] = useState('')
   const [isVisible, setIsVisible] = useState(false)
-  const [gameIndex, setGameIndex] = useState(0)
 
   const AppValue = {
     socket,
@@ -78,15 +79,15 @@ export default function AppState({children}: {children: ReactNode}) {
     tie,
     setTie,
   }
-  const modalValue = {title, setTitle, text, setText, isVisible, setIsVisible}
 
   return (
     <AppContext.Provider value={AppValue}>
       <GameContext.Provider value={gameValue}>
         <GameMultiplayerContext.Provider value={gameMultiplayerValue}>
-          <ModalContext.Provider value={modalValue}>
-            {children}
-          </ModalContext.Provider>
+          <ModalContextOld.Provider
+            value={{title, setTitle, text, setText, isVisible, setIsVisible}}>
+            <ModalProvider>{children}</ModalProvider>
+          </ModalContextOld.Provider>
         </GameMultiplayerContext.Provider>
       </GameContext.Provider>
     </AppContext.Provider>

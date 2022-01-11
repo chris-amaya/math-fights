@@ -4,7 +4,6 @@ import {NavigationContainer} from '@react-navigation/native'
 import {createDrawerNavigator} from '@react-navigation/drawer'
 import StackNavigator from './navigator/StackNavigator'
 
-import Modal from './components/Modal'
 import AppState from './context/AppState'
 
 const Drawer = createDrawerNavigator()
@@ -20,7 +19,7 @@ export default function App() {
             component={StackNavigator}
           />
         </Drawer.Navigator>
-        <Modal />
+        {/* <Modal resolve={resolve} /> */}
       </NavigationContainer>
     </AppState>
   )
