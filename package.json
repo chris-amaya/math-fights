@@ -23,6 +23,7 @@
     ]
   },
   "scripts": {
+    "dev": "lerna run dev",
     "docs": "doctoc --title '**Table of content**' README.md",
     "clean": "lerna run clean",
     "build": "lerna run build",
