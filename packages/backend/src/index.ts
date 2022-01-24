@@ -1,5 +1,5 @@
 import dotenv from 'dotenv'
-import App from './app'
+import App from './App'
 
 dotenv.config()
 const server = new App(8000)
