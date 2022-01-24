@@ -14,7 +14,7 @@ export type IScocketEmitEvents = {
 }
 
 export interface IStart {
-  opponent: IUser
+  opponent?: IUser
   questions: GameQuestions[]
   room: IRoom
 }
