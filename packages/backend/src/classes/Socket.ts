@@ -83,7 +83,11 @@ export class SocketApp implements ASocket {
 
   rematch(roomId: string): void {
     const {difficult} = this.room.getRoomById(roomId)['room']
+
+    // update the new user's state
     this.room.updateUser({id: this.client.id, rematch: true}, roomId)
+
+    // getting the opponent data so we can decide if there's a rematch
     const opponent = this.room.getOpponent(roomId, this.client.id)
     if (opponent.rematch === true) {
       const questions = getQuestions(5, difficult)
@@ -109,5 +113,13 @@ export class SocketApp implements ASocket {
     }
   }
 
-  disconnect(): void {}
+  disconnect(): void {
+    const roomData = this.room.findRoomByUser(this.client.id)
+    if (roomData) {
+      notify(this.io, roomData.users, 'end-game')
+      this.room.deleteRoomById(roomData.id)
+    }
+
+    this.users.remove(this.client.id)
+  }
 }

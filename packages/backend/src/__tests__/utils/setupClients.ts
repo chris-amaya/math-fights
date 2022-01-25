@@ -2,14 +2,14 @@ import {SocketApp} from '../../classes/Socket'
 import Room from '../../classes/Room'
 import Users from '../../classes/Users'
 
-interface ICreateClient {
+export interface ICreateClient {
   (overrides?: any): {
     io: any
     id: string
   }
 }
 
-interface IClient {
+export interface IClient {
   id: string
   socketApp?: SocketApp
 }

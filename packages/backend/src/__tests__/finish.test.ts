@@ -1,19 +1,7 @@
 import Room from '../classes/Room'
 import {SocketApp} from '../classes/Socket'
 import Users from '../classes/Users'
-import setupClients from './utils/setupClients'
-
-interface ICreateClient {
-  (overrides?: any): {
-    io: any
-    id: string
-  }
-}
-
-interface IClient {
-  id: string
-  socketApp?: SocketApp
-}
+import setupClients, {IClient} from './utils/setupClients'
 
 describe('should finish event', () => {
   let room: Room | null = null
