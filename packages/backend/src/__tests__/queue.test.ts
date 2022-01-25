@@ -106,7 +106,7 @@ describe('should queue', () => {
     ])
   })
 
-  it('users are notified', () => {
+  it.skip('users are notified', () => {
     socketApp.queue('EASY')
     socketApp2.queue('EASY')
     expect(mockNotify).toHaveBeenCalled()

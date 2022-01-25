@@ -36,8 +36,6 @@ export class SocketApp implements ASocket {
 
     const roomData = this.room.findRoomAvailable(difficult)
 
-    console.log(notify)
-
     if (roomData) {
       const users = this.room.addUserToRoomById(roomData.room.id, user)
 
@@ -59,9 +57,57 @@ export class SocketApp implements ASocket {
     }
   }
 
-  finish(data: IFinishProps): void {}
+  finish({answers, roomId, timer}: IFinishProps) {
+    this.room.updateUser(
+      {
+        id: this.client.id,
+        finished: true,
+        answers,
+        timing: timer,
+        rematch: false,
+      },
+      roomId,
+    )
+
+    if (this.room.bothPlayersHaveFinished(roomId)) {
+      const players = this.room.getUsersInRoom(roomId)
+      const {winner, loser, tie} = this.room.getWinner(players[0], players[1])
+
+      notify(this.io, players, 'winner', {
+        winner,
+        loser,
+        tie,
+      })
+    }
+  }
+
+  rematch(roomId: string): void {
+    const {difficult} = this.room.getRoomById(roomId)['room']
+    this.room.updateUser({id: this.client.id, rematch: true}, roomId)
+    const opponent = this.room.getOpponent(roomId, this.client.id)
+    if (opponent.rematch === true) {
+      const questions = getQuestions(5, difficult)
+      this.room.getUsersInRoom(roomId).forEach((user) => {
+        notify(this.io, user, 'rematch', questions)
+
+        this.room.updateUser(
+          {
+            id: user.id,
+            rematch: false,
+            answers: {
+              correct: 0,
+              wrong: 0,
+            },
+            timing: 0,
+            finished: false,
+          },
+          roomId,
+        )
+      })
+    } else {
+      notify(this.io, opponent, 'want-rematch')
+    }
+  }
 
   disconnect(): void {}
-
-  rematch(roomId: string): void {}
 }
