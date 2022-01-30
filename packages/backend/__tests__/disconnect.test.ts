@@ -1,8 +1,10 @@
-import Room from '../classes/Room'
-import Users from '../classes/Users'
+import Room from '../src/classes/Room'
+import Users from '../src/classes/Users'
 import setupClients, {IClient} from './utils/setupClients'
 
 describe('should finish event', () => {
+  it('should finish event', () => {})
+
   let room: Room | null = null
   let users: Users | null = null
 

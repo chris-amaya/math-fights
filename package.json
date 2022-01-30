@@ -30,6 +30,7 @@
     "pub": "lerna publish",
     "test": "lerna run test",
     "backend:test": "yarn workspace @math-fights/backend test",
+    "common:test": "yarn workspace @math-fights/common test",
     "reset": "npx rimraf ./**/node_modules yarn.lock"
   },
   "devDependencies": {

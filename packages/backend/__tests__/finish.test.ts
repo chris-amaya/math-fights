@@ -1,6 +1,5 @@
-import Room from '../classes/Room'
-import {SocketApp} from '../classes/Socket'
-import Users from '../classes/Users'
+import Room from '../src/classes/Room'
+import Users from '../src/classes/Users'
 import setupClients, {IClient} from './utils/setupClients'
 
 describe('should finish event', () => {

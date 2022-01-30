@@ -10,7 +10,7 @@
     "start": "node dist/index.js",
     "dev": "nodemon src/index.ts",
     "build": "tsc -p .",
-    "test": "jest --maxWorkers 1 --watch --detectOpenHandles=true"
+    "test": "jest --watch"
   },
   "dependencies": {
     "@math-fights/common": "*",
@@ -21,6 +21,7 @@
     "socket.io": "^4.4.0"
   },
   "devDependencies": {
+    "@types/jest": "^27.4.0",
     "@babel/cli": "^7.16.0",
     "@babel/core": "^7.16.0",
     "@babel/preset-env": "^7.16.4",
@@ -28,6 +29,7 @@
     "@babel/runtime": "^7.16.3",
     "@types/express": "^4.17.13",
     "@types/node": "^16.11.10",
+    "jest": "^27.4.7",
     "nodemon": "^2.0.15",
     "rimraf": "~3.0.2",
     "ts-node": "^10.4.0",

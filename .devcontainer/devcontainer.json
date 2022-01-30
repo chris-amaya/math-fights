@@ -1,0 +1,19 @@
+{
+  "name": "Ubuntu W/node",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "args": {"user": "node"}
+  },
+  "features": {
+    "node": {
+      "version": "lts",
+      "nodeGypDependencies": true
+    }
+  },
+  "workspaceFolder": "/workspaces",
+  "settings": {},
+  "extensions": ["dbaeumer.vscode-eslint", "mongodb.mongodb-vscode"],
+  "forwardPorts": [3000, 27017],
+  "postCreateCommand": "yarn install",
+  "remoteUser": "node"
+}

@@ -1,5 +1,6 @@
 import {mock} from '@math-fights/common'
-import Room from '../../classes/Room'
+import Room from '../../src/classes/Room'
+import {IUser} from '@math-fights/common'
 
 describe('Test on class Room.ts', () => {
   let room: Room
@@ -71,11 +72,11 @@ describe('Test on class Room.ts', () => {
   })
 
   test('should update user', () => {
-    room.updateUser({id: '12345', correctAnswers: 5}, '1')
+    room.updateUser({id: '12345', answers: {correct: 7, wrong: 3}}, '1')
 
     const {room: _room} = room.getRoomById('1')
     const user = _room.users.find((user) => user.id === '12345')
-    expect(user?.correctAnswers).toBe(5)
+    expect(user?.answers?.correct).toBe(7)
   })
 
   test('should bothPlayersHaveFinished return true', () => {
@@ -86,8 +87,8 @@ describe('Test on class Room.ts', () => {
   })
 
   test.skip('should player1 be the winner', () => {
-    const player1 = {id: '55555', correctAnswers: 5}
-    const player2 = {id: '11111', correctAnswers: 1}
+    const player1: IUser = {id: '55555', answers: {correct: 5, wrong: 3}}
+    const player2 = {id: '11111', answers: {correct: 1, wrong: 3}}
 
     mock(room, 'rooms', [
       {id: '1', difficult: 'MEDIUM', users: [player1, player2]},

@@ -22,41 +22,51 @@ function getSignByString(sign: string) {
 
 function getRandomNumberByDifficult(difficult: GameDifficulty): number {
   if (difficult === 'EASY') {
-    return Math.floor(Math.random() * 10)
+    return Math.floor(Number((Math.random() * 10).toFixed(2)))
   }
 
   if (difficult === 'MEDIUM') {
-    return Math.floor(Math.random() * 100)
+    return Math.floor(Number((Math.random() * 100).toFixed(2)))
   }
 
   if (difficult === 'HARD') {
-    return Math.floor(Math.random() * 1000)
+    return Math.floor(Number((Math.random() * 1000).toFixed(2)))
   }
 
   throw new Error('no difficult was provided')
 }
 
 function getResult(number1: number, number2: number, sign: TSign) {
+  const getAddition = (number1: number, number2: number) => number1 + number2
+  const getSubstraction = (number1: number, number2: number) =>
+    number1 - number2
+  const getMultiplication = (number1: number, number2: number) =>
+    number1 * number2
+  const getDivision = (number1: number, number2: number) => number1 / number2
+
+  let result: number
+
   if (sign === 'ADD') {
-    return number1 + number2
-  }
-
-  if (sign === 'MULTIPLY') {
-    return number1 * number2
-  }
-
-  if (sign === 'DIVIDE') {
-    return number1 / number2
+    result = getAddition(number1, number2)
   }
 
   if (sign === 'SUBSTRACT') {
-    return number1 - number2
+    result = getSubstraction(number1, number2)
   }
 
-  throw new Error('no sign was provided')
+  if (sign === 'MULTIPLY') {
+    result = getMultiplication(number1, number2)
+  }
+
+  if (sign === 'DIVIDE') {
+    result = getDivision(number1, number2)
+  }
+
+  return result!
 }
 
 function getFakeResults(result: number): number[] {
+  // TODO: infinity value is given sometimes, detect this and thow an error
   const start = result - 5
   const end = result + 5
   const fakeResultsLength = 3
@@ -99,7 +109,7 @@ function getRandomInt(min: number, max: number): number {
 
 function shuffle(array: number[]) {
   let currentIndex = array.length
-  let randomIndex = null
+  let randomIndex: number | null = null
 
   // While there remain elements to shuffle...
   while (currentIndex != 0) {
@@ -123,30 +133,59 @@ export default function getQuestions(
 ) {
   const questions: GameQuestions[] = []
 
-  let i = 0
-  while (i < limitQuestions) {
+  for (let index = 0; index < limitQuestions; index++) {
     const stringSign = getStringSign()
     const sign = getSignByString(stringSign)
-    const number1 = getRandomNumberByDifficult(difficult)
-    const number2 = getRandomNumberByDifficult(difficult)
 
-    const result = getResult(number1, number2, stringSign)
+    let result: number = 0
+    let number1: number = 0
+    let number2: number = 0
+
+    // loop needed because infinity value is given sometimes
+    while (result === Infinity || result === -Infinity) {
+      number1 = getRandomNumberByDifficult(difficult)
+      number2 = getRandomNumberByDifficult(difficult)
+
+      result = getResult(number1, number2, stringSign)
+    }
 
     const fakeResult = getFakeResults(result)
 
-    const obj: GameQuestions = {
+    questions.push({
       sign,
       result,
       fakeResults: [...fakeResult],
       numbersUsed: [number1, number2],
-    }
-
-    questions.push(obj)
-    i++
+    })
   }
 
   return questions
+
+  // let i = 0
+  // while (i < limitQuestions) {
+  //   const stringSign = getStringSign()
+  //   const sign = getSignByString(stringSign)
+  //   const number1 = getRandomNumberByDifficult(difficult)
+  //   const number2 = getRandomNumberByDifficult(difficult)
+
+  //   const result = getResult(number1, number2, stringSign)
+
+  //   const fakeResult = getFakeResults(result)
+
+  //   questions.push({
+  //     sign,
+  //     result,
+  //     fakeResults: [...fakeResult],
+  //     numbersUsed: [number1, number2],
+  //   })
+  //   i++
+  // }
+
+  // return questions
 }
+
+// console.log(getQuestions(3, 'EASY').length)
+// console.log(getQuestions(10, 'EASY').length)
 
 export {
   getStringSign,

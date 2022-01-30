@@ -1,6 +1,6 @@
-import {SocketApp} from '../classes/Socket'
-import Room from '../classes/Room'
-import Users from '../classes/Users'
+import {SocketApp} from '../src/classes/Socket'
+import Room from '../src/classes/Room'
+import Users from '../src/classes/Users'
 
 describe('should queue', () => {
   const mockNotify = jest.fn()

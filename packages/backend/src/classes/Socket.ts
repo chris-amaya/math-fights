@@ -31,17 +31,12 @@ export class SocketApp implements ASocket {
 
   queue(difficult: GameDifficulty): void {
     const user: IUser = {id: this.client.id}
-
     this.users.add(user)
-
     const roomData = this.room.findRoomAvailable(difficult)
-
     if (roomData) {
       const users = this.room.addUserToRoomById(roomData.room.id, user)
-
       if (users) {
         const questions = getQuestions(10, difficult)
-
         notify(this.io, users, 'start', {
           questions,
           room: {
@@ -51,7 +46,6 @@ export class SocketApp implements ASocket {
         })
       }
     }
-
     if (!roomData) {
       this.room.addRoom(difficult, user)
     }

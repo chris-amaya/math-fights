@@ -1,6 +1,6 @@
-import {SocketApp} from '../../classes/Socket'
-import Room from '../../classes/Room'
-import Users from '../../classes/Users'
+import {SocketApp} from '../../src/classes/Socket'
+import Room from '../../src/classes/Room'
+import Users from '../../src/classes/Users'
 
 export interface ICreateClient {
   (overrides?: any): {
@@ -24,7 +24,9 @@ function setupClients(clients: IClient[], room: Room, users: Users): IClient[] {
         ...overrides,
       }
     }
-    const data = createClient(...client.id)
+    const data = createClient({
+      id: client.id,
+    })
 
     return {
       socketApp: new SocketApp(data as any, data.io, room!, users!),

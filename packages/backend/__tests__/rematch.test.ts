@@ -1,5 +1,6 @@
-import Room from '../classes/Room'
-import Users from '../classes/Users'
+import Room from '../src/classes/Room'
+import Users from '../src/classes/Users'
+// import setupClients, {IClient} from './utils/setupClients'
 import setupClients, {IClient} from './utils/setupClients'
 
 describe('should finish event', () => {
@@ -28,4 +29,6 @@ describe('should finish event', () => {
     clients[0].socketApp?.queue('EASY')
     clients[1].socketApp?.queue('EASY')
   })
+
+  test.todo('should tell a user has finished')
 })
