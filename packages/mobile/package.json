@@ -8,6 +8,7 @@
     "start": "react-native start",
     "dev": "yarn run android",
     "test": "jest",
+    "test:watch": "jest --watch",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {

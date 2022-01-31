@@ -28,7 +28,8 @@
     "clean": "lerna run clean",
     "build": "lerna run build",
     "pub": "lerna publish",
-    "test": "lerna run test",
+    "test": "lerna run test --stream",
+    "test:watch": "lerna run --parallel test:watch",
     "backend:test": "yarn workspace @math-fights/backend test",
     "common:test": "yarn workspace @math-fights/common test",
     "reset": "npx rimraf ./**/node_modules yarn.lock"

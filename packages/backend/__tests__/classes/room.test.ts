@@ -86,7 +86,7 @@ describe('Test on class Room.ts', () => {
     expect(finished).toBe(true)
   })
 
-  test.skip('should player1 be the winner', () => {
+  test('should player1 be the winner', () => {
     const player1: IUser = {id: '55555', answers: {correct: 5, wrong: 3}}
     const player2 = {id: '11111', answers: {correct: 1, wrong: 3}}
 
