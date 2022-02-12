@@ -22,6 +22,8 @@ export interface IFinishProps {
   timer: number
 }
 
-export interface IRematchProps {
-  roomId: string
-}
+// export interface IRematchProps {
+//   roomId: string
+// }
+
+export type IRematchProps = string

@@ -137,7 +137,7 @@ export default function getQuestions(
     const stringSign = getStringSign()
     const sign = getSignByString(stringSign)
 
-    let result: number = 0
+    let result = Infinity
     let number1: number = 0
     let number2: number = 0
 
@@ -183,9 +183,6 @@ export default function getQuestions(
 
   // return questions
 }
-
-// console.log(getQuestions(3, 'EASY').length)
-// console.log(getQuestions(10, 'EASY').length)
 
 export {
   getStringSign,

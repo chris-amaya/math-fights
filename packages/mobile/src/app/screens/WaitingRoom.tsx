@@ -54,6 +54,8 @@ export default function WaitingRoom({navigation, route}: IProps) {
 
   useEffect(() => {
     socket.on('start', ({questions, room}) => {
+      console.log(questions)
+
       setQuestions(questions)
 
       if (room.users[0].id === socket.id) {

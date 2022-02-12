@@ -55,7 +55,7 @@ export default function Results({navigation}: Props) {
     setTitle('Rematch')
     setText('waiting for opponent to accept the rematch')
     setIsVisible(true)
-    socket.emit('rematch', {roomId})
+    socket.emit('rematch', roomId)
     socket.off('want-rematch')
   }
 
