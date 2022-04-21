@@ -6,3 +6,4 @@ export interface GameQuestions {
 }
 
 export type GameDifficulty = 'EASY' | 'MEDIUM' | 'HARD'
+export type IGameMode = 'find-result' | 'find-number'

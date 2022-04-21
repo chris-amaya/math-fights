@@ -1,7 +1,7 @@
-import {GameDifficulty, IFinishProps} from '@math-fights/common'
+import {GameDifficulty, IFinishProps, IGameMode} from '@math-fights/common'
 
 export interface ISocket {
-  queue(data: GameDifficulty): void
+  queue(difficult: GameDifficulty, gameMode: IGameMode): void
   rematch(data: string): void
   finish(data: IFinishProps): void
   disconnect(): void

@@ -1,4 +1,5 @@
 import {GameDifficulty} from './index'
+import {IGameMode} from './game'
 
 interface socketOn<T> {
   (data: T): void
@@ -11,7 +12,10 @@ export interface ISocketOnEvents {
   'end-game': any
 }
 
-export type IQueueProps = GameDifficulty
+export type IQueueProps = {
+  difficult: GameDifficulty
+  gameMode: IGameMode
+}
 
 export interface IFinishProps {
   roomId: string
@@ -21,9 +25,5 @@ export interface IFinishProps {
   }
   timer: number
 }
-
-// export interface IRematchProps {
-//   roomId: string
-// }
 
 export type IRematchProps = string

@@ -10,6 +10,8 @@ import {
   GameDifficulty,
   getQuestions,
   IFinishProps,
+  IGameMode,
+  IQueueProps,
   IRematchProps,
   IScocketEmitEvents,
   ISocketOnEvents,
@@ -23,15 +25,15 @@ export class SocketAdapter implements ISocket {
     private client: Socket<ISocketOnEvents, ISocketOnEvents>,
     private io: Server<ISocketOnEvents, IScocketEmitEvents>,
   ) {
-    this.client.on('queue', (data: any) => this.queue(data))
+    // TODO: set the correct types for this
+    this.client.on('queue', ({difficult, gameMode}: IQueueProps) => this.queue(difficult, gameMode))
     this.client.on('finish', (data: any) => this.finish(data))
     this.client.on('rematch', (data: any) => this.rematch(data))
     this.client.on('end-game', () => this.disconnect())
     this.client.on('disconnect', () => this.disconnect())
-    // this.client.on('error', () => this.disconnect())
   }
 
-  queue(difficult: GameDifficulty): void {
+  queue(difficult: GameDifficulty, gameMode: IGameMode): void {
     const user = new User(this.client.id)
     this.users.add(user)
 
