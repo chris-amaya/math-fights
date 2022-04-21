@@ -43,7 +43,6 @@ export default function useMultiplayerGame({
   const {questions} = useContext(GameMultiplayerContext)
   const {socket, roomId} = useContext(AppContext)
 
-  // const [timer, setTimer] = useState(new Timer())
   const timer = useRef(new Timer())
 
   if (!questions) throw new Error('questions is not defined')

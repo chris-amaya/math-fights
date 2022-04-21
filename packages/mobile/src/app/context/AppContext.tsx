@@ -7,6 +7,7 @@ import {
 } from '@math-fights/common'
 import {Timer} from '../classes/Timer'
 import {RootStackParams} from '../types/RootStackParams'
+import {IGameMode} from '../../../../common/src/lib/types/game'
 
 export interface IAppContext {
   socket: Socket<IScocketEmitEvents, ISocketOnEvents>
@@ -15,6 +16,8 @@ export interface IAppContext {
   setDifficult: React.Dispatch<GameDifficulty>
   mode: 'SINGLE_PLAYER' | 'MULTIPLAYER' | undefined
   setMode: React.Dispatch<this['mode']>
+  gameMode: IGameMode | undefined
+  setGameMode: React.Dispatch<this['gameMode']>
   roomId: string
   setRoomId: React.Dispatch<React.SetStateAction<this['roomId']>>
   URL: keyof RootStackParams | null
@@ -33,4 +36,6 @@ export const AppContext = React.createContext<IAppContext>({
   setRoomId: () => {},
   URL: null,
   setURL: () => {},
+  gameMode: undefined,
+  setGameMode: () => {},
 })

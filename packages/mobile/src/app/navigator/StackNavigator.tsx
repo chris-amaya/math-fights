@@ -11,6 +11,7 @@ import BarIcon from './BarIcon'
 import WaitingRoom from '../screens/WaitingRoom'
 import MultiplayerGame from '../screens/MultiPlayer/Game'
 import ResultsMultiplayer from '../screens/MultiPlayer/Results'
+import Options from '../screens/Options'
 
 const Stack = createStackNavigator<RootStackParams>()
 interface Props extends DrawerScreenProps<any, any> {}
@@ -27,6 +28,7 @@ export default function StackNavigator({navigation, route}: Props) {
       <Stack.Screen name="Game" component={Game} />
       <Stack.Screen name="Results" component={Results} />
       <Stack.Screen name="WaitingRoom" component={WaitingRoom} />
+      <Stack.Screen name="Options" component={Options} />
 
       <Stack.Screen name="[MULTIPLAYER]: Game" component={MultiplayerGame} />
       <Stack.Screen

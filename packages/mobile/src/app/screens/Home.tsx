@@ -34,7 +34,7 @@ export default function Home({navigation}: Props) {
 
   function handleNavigation(value: IAppContext['mode']): void {
     setMode(value)
-    navigation.navigate('Difficult')
+    navigation.navigate('Options')
   }
 
   return (

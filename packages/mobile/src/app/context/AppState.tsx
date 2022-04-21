@@ -1,7 +1,12 @@
 import React, {ReactNode, useState} from 'react'
 import {io} from 'socket.io-client'
 
-import {GameDifficulty, GameQuestions, IPlayer} from '@math-fights/common'
+import {
+  GameDifficulty,
+  GameQuestions,
+  IGameMode,
+  IPlayer,
+} from '@math-fights/common'
 import {Timer} from '../classes/Timer'
 import {GameContext, gameTypeContext} from './GameContext'
 import {
@@ -34,6 +39,7 @@ export default function AppState({children}: {children: ReactNode}) {
   })
   const [timing, setTiming] = useState<string>('')
   const [gameIndex, setGameIndex] = useState(0)
+  const [gameMode, setGameMode] = useState<IGameMode>()
 
   const [questions, setQuestions] =
     useState<IGameMultiplayerContext['questions']>(null)
@@ -57,6 +63,8 @@ export default function AppState({children}: {children: ReactNode}) {
     setRoomId,
     URL,
     setURL,
+    gameMode,
+    setGameMode,
   }
 
   const gameValue = {
